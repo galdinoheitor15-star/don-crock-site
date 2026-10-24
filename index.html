@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Don Crock | Frango Crocante de Verdade</title>
+<meta name="description" content="Don Crock — frango frito crocante, burguers e parmegiana em Carpina e Vitória de Santo Antão (PE). Peça pelo iFood ou WhatsApp.">
+<meta name="theme-color" content="#E31B23">
+<link rel="icon" href="img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E31B23; --red-dark:#B3121A; --black:#141110; --ink:#1d1a19;
+    --cream:#FFF5E6; --yellow:#FFC527; --white:#fff; --muted:#6b625e;
+    --radius:22px; --shadow:0 18px 40px -18px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Outfit",system-ui,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.55}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,100% - 32px);margin-inline:auto}
+  .display{font-family:"Lilita One",sans-serif;font-weight:400;letter-spacing:.5px;line-height:.95}
+
+  /* logo recriado (texto empilhado com contorno, igual ao da marca) */
+  .logo-type{font-family:"Lilita One";color:#fff;line-height:.82;text-align:center;
+    -webkit-text-stroke:.09em var(--black);paint-order:stroke fill;
+    text-shadow:0 .06em 0 var(--black)}
+  .logo-type span{display:block}
+
+  /* ===== NAV ===== */
+  header{position:fixed;inset:0 0 auto;z-index:50;transition:.35s}
+  header.scrolled{background:rgba(20,17,16,.92);backdrop-filter:blur(10px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:76px}
+  .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800}
+  .brand img{width:46px;height:46px;border-radius:50%;border:3px solid var(--yellow);transition:transform .5s}
+  .brand:hover img{transform:rotate(-14deg) scale(1.08)}
+  .brand b{font-family:"Lilita One";font-size:1.35rem;font-weight:400;letter-spacing:.5px}
+  .links{display:flex;gap:28px;align-items:center;color:#fff;font-weight:600}
+  .links a:not(.btn){position:relative}
+  .links a:not(.btn)::after{content:"";position:absolute;left:0;bottom:-4px;height:3px;width:0;background:var(--yellow);border-radius:3px;transition:width .3s}
+  .links a:not(.btn):hover::after{width:100%}
+  .burger{display:none;background:none;border:0;color:#fff;font-size:1.8rem;cursor:pointer}
+
+  .btn{display:inline-flex;align-items:center;gap:10px;font-weight:800;border-radius:999px;padding:14px 26px;transition:transform .2s,box-shadow .2s,background .2s;cursor:pointer;border:0;font-family:inherit;font-size:1rem}
+  .btn:hover{transform:translateY(-3px)}
+  .btn-yellow{background:var(--yellow);color:var(--black);box-shadow:0 6px 0 #c9940a}
+  .btn-yellow:hover{box-shadow:0 9px 0 #c9940a}
+  .btn-dark{background:var(--black);color:#fff;box-shadow:0 6px 0 #000}
+  .btn-red{background:var(--red);color:#fff;box-shadow:0 6px 0 var(--red-dark)}
+  .btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.7)}
+  .btn-ghost:hover{background:#fff;color:var(--red)}
+  .btn svg{width:20px;height:20px}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;min-height:min(100svh,960px);background:var(--red);color:#fff;display:flex;align-items:center;overflow:hidden;padding:110px 0 120px}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 75% 45%,rgba(255,197,39,.35),transparent 45%),
+               radial-gradient(circle at 10% 90%,rgba(0,0,0,.25),transparent 40%);}
+  .rays{position:absolute;width:1600px;height:1600px;left:72%;top:48%;translate:-50% -50%;
+    background:repeating-conic-gradient(rgba(255,255,255,.07) 0 10deg,transparent 10deg 20deg);
+    animation:spin 60s linear infinite;border-radius:50%;mask:radial-gradient(circle,#000 20%,transparent 65%)}
+  @keyframes spin{to{rotate:360deg}}
+  .hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
+  .tag{display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.25);padding:8px 16px;border-radius:999px;font-weight:600;font-size:.92rem}
+  .tag .dot{width:9px;height:9px;border-radius:50%;background:var(--yellow);animation:blink 1.4s infinite}
+  @keyframes blink{50%{opacity:.25}}
+  .hero h1{font-size:clamp(3rem,7.5vw,6.2rem);margin:22px 0 18px}
+  .hero h1 .crunch{display:inline-block;color:var(--yellow);-webkit-text-stroke:3px var(--black);paint-order:stroke fill;text-shadow:0 6px 0 var(--black)}
+  .hero h1 .crunch span{display:inline-block;animation:crunch 2.6s ease-in-out infinite}
+  .hero h1 .crunch span:nth-child(2){animation-delay:.08s}.hero h1 .crunch span:nth-child(3){animation-delay:.16s}
+  .hero h1 .crunch span:nth-child(4){animation-delay:.24s}.hero h1 .crunch span:nth-child(5){animation-delay:.32s}
+  .hero h1 .crunch span:nth-child(6){animation-delay:.40s}.hero h1 .crunch span:nth-child(7){animation-delay:.48s}
+  .hero h1 .crunch span:nth-child(8){animation-delay:.56s}
+  @keyframes crunch{0%,60%,100%{transform:translateY(0) rotate(0)}70%{transform:translateY(-14px) rotate(-6deg)}80%{transform:translateY(0) rotate(4deg)}}
+  .hero p.lead{font-size:1.2rem;max-width:520px;opacity:.95}
+  .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-top:32px}
+  .hero-stats{display:flex;gap:34px;margin-top:42px;flex-wrap:wrap}
+  .hero-stats div b{display:block;font-family:"Lilita One";font-size:2.2rem;font-weight:400;color:var(--yellow);line-height:1}
+  .hero-stats div span{font-size:.9rem;opacity:.85}
+
+  .hero-visual{position:relative;justify-self:center;width:min(480px,100%);aspect-ratio:1}
+  .bucket{position:absolute;inset:6%;border-radius:50%;overflow:hidden;border:10px solid var(--yellow);box-shadow:0 0 0 10px var(--black),0 40px 80px -20px rgba(0,0,0,.7);animation:float 5s ease-in-out infinite}
+  .bucket img{width:100%;height:100%;object-fit:cover;object-position:center 30%;transform:scale(1.15)}
+  @keyframes float{50%{transform:translateY(-16px) rotate(2deg)}}
+  .badge{position:absolute;right:-4%;top:-2%;width:150px;height:150px;animation:spin 14s linear infinite}
+  .badge text{font-family:"Lilita One";font-size:15.5px;letter-spacing:3px;fill:#fff}
+  .badge-core{position:absolute;right:calc(-4% + 38px);top:calc(-2% + 38px);width:74px;height:74px;border-radius:50%;background:var(--black);display:grid;place-items:center;font-size:2rem;box-shadow:0 0 0 4px var(--yellow)}
+  .sticker{position:absolute;left:-6%;bottom:10%;background:#fff;color:var(--black);border:4px solid var(--black);border-radius:18px;padding:10px 16px;font-family:"Lilita One";font-size:1.25rem;rotate:-8deg;box-shadow:6px 6px 0 var(--black);animation:wiggle 3s ease-in-out infinite}
+  .sticker small{display:block;font-family:"Outfit";font-weight:700;font-size:.75rem;color:var(--red)}
+  @keyframes wiggle{0%,100%{rotate:-8deg}50%{rotate:-2deg}}
+  .floaty{position:absolute;font-size:2.4rem;animation:drift linear infinite;opacity:.9;filter:drop-shadow(0 8px 10px rgba(0,0,0,.3));pointer-events:none}
+  @keyframes drift{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-30px) rotate(20deg)}100%{transform:translateY(0) rotate(0)}}
+
+  .checker{height:34px;background:conic-gradient(var(--red) 25%,#fff 0 50%,var(--red) 0 75%,#fff 0) 0 0/34px 34px}
+  .hero .checker{position:absolute;bottom:0;left:0;right:0}
+
+  /* ===== MARQUEE ===== */
+  .marquee{background:var(--black);color:var(--yellow);overflow:hidden;padding:18px 0;rotate:-1.5deg;margin:-14px -20px 0;position:relative;z-index:3;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .marquee-track{display:flex;gap:40px;width:max-content;animation:marq 26s linear infinite;font-family:"Lilita One";font-size:1.7rem;white-space:nowrap}
+  .marquee-track span{display:flex;align-items:center;gap:40px}
+  .marquee-track i{font-style:normal;color:#fff}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* ===== SECTIONS ===== */
+  section{padding:110px 0}
+  .kicker{display:inline-block;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:2px;font-size:.85rem;margin-bottom:12px}
+  .kicker::before{content:"🍗 "}
+  h2.display{font-size:clamp(2.4rem,5vw,3.8rem);color:var(--black)}
+  h2.display em{font-style:normal;color:var(--red)}
+  .sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:50px;flex-wrap:wrap}
+  .sec-head p{max-width:440px;color:var(--muted);font-size:1.08rem}
+
+  /* menu */
+  .menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,.9,.3,1.4),box-shadow .35s;position:relative;border:3px solid var(--black)}
+  .card:hover{transform:translateY(-10px) rotate(-1.2deg);box-shadow:10px 14px 0 var(--black)}
+  .card .ph{aspect-ratio:4/4.2;overflow:hidden;background:var(--black)}
+  .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .card:hover .ph img{transform:scale(1.08)}
+  .card .body{padding:20px 22px 24px}
+  .card h3{font-family:"Lilita One";font-weight:400;font-size:1.6rem;line-height:1.05;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.95rem}
+  .card .pill{position:absolute;top:14px;left:14px;background:var(--yellow);color:var(--black);font-weight:800;font-size:.75rem;padding:6px 12px;border-radius:999px;border:2px solid var(--black);text-transform:uppercase}
+  .menu-note{margin-top:34px;text-align:center;color:var(--muted)}
+  .menu-note a{color:var(--red);font-weight:700;text-decoration:underline}
+
+  /* promo */
+  .promo{background:var(--black);color:#fff;position:relative;overflow:hidden}
+  .promo::after{content:"15 & 30";position:absolute;right:-30px;bottom:-60px;font-family:"Lilita One";font-size:clamp(8rem,22vw,18rem);color:rgba(255,255,255,.04);line-height:1;pointer-events:none}
+  .promo-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:50px;align-items:center;position:relative;z-index:1}
+  .promo h2.display{color:#fff}
+  .promo h2.display em{color:var(--yellow)}
+  .promo p{opacity:.85;font-size:1.1rem;margin:18px 0 30px;max-width:480px}
+  .countdown{display:flex;gap:14px;flex-wrap:wrap}
+  .cd{background:var(--red);border-radius:18px;padding:16px 10px;min-width:92px;text-align:center;border:3px solid #fff;box-shadow:6px 6px 0 var(--yellow)}
+  .cd b{display:block;font-family:"Lilita One";font-weight:400;font-size:2.6rem;line-height:1}
+  .cd span{font-size:.78rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+  .cd-label{font-weight:700;color:var(--yellow);margin-bottom:12px}
+  .promo-img{position:relative;justify-self:center}
+  .promo-img img{width:min(420px,100%);border-radius:28px;border:6px solid #fff;rotate:3deg;box-shadow:0 30px 60px rgba(0,0,0,.5);transition:rotate .5s}
+  .promo-img:hover img{rotate:-2deg}
+  .promo-img .sticker{left:-20px;bottom:30px}
+
+  /* história */
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .story-photos{position:relative;height:560px}
+  .story-photos img{position:absolute;border-radius:24px;border:5px solid #fff;box-shadow:var(--shadow);object-fit:cover}
+  .story-photos .a{width:62%;height:78%;left:0;top:0;rotate:-4deg}
+  .story-photos .b{width:52%;height:62%;right:0;bottom:0;rotate:5deg;object-position:top}
+  .story-photos .est{position:absolute;left:50%;top:50%;translate:-50% -50%;width:120px;height:120px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;text-align:center;border:5px solid var(--black);box-shadow:0 0 0 5px var(--yellow);font-family:"Lilita One";line-height:1;z-index:2;animation:pop 2.4s ease-in-out infinite}
+  .story-photos .est small{display:block;font-size:.85rem;font-family:"Outfit";font-weight:700}
+  .story-photos .est b{font-weight:400;font-size:2rem}
+  @keyframes pop{50%{transform:scale(1.08)}}
+  .story p{color:var(--muted);font-size:1.08rem;margin-top:18px}
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+  .values div{background:#fff;border:3px solid var(--black);border-radius:16px;padding:16px;text-align:center;font-weight:700;font-size:.92rem;transition:background .2s,transform .2s}
+  .values div:hover{background:var(--yellow);transform:translateY(-4px)}
+  .values div span{display:block;font-size:1.8rem;margin-bottom:4px}
+  blockquote{margin-top:28px;background:var(--red);color:#fff;padding:22px 26px;border-radius:18px;font-size:1.1rem;font-weight:600;position:relative}
+  blockquote::before{content:"“";position:absolute;top:-28px;left:16px;font-family:"Lilita One";font-size:5rem;color:var(--yellow);line-height:1}
+  blockquote cite{display:block;margin-top:8px;font-size:.85rem;font-style:normal;opacity:.8;font-weight:500}
+
+  /* unidades */
+  .units{background:var(--red);color:#fff;position:relative}
+  .units h2.display{color:#fff}
+  .units h2.display em{color:var(--yellow)}
+  .units .kicker{color:var(--yellow)}
+  .units .sec-head p{color:rgba(255,255,255,.85)}
+  .unit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .unit{background:#fff;color:var(--ink);border-radius:var(--radius);overflow:hidden;border:4px solid var(--black);box-shadow:8px 8px 0 var(--black);display:flex;flex-direction:column;transition:transform .3s}
+  .unit:hover{transform:translateY(-6px)}
+  .unit .ph{height:200px;overflow:hidden;position:relative}
+  .unit .ph img{width:100%;height:100%;object-fit:cover}
+  .unit .ph .city{position:absolute;left:14px;bottom:14px;background:var(--black);color:#fff;padding:6px 12px;border-radius:999px;font-size:.78rem;font-weight:700}
+  .unit .body{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .unit h3{font-family:"Lilita One";font-weight:400;font-size:1.65rem;line-height:1}
+  .unit .row{display:flex;gap:10px;color:var(--muted);font-size:.95rem}
+  .unit .row b{color:var(--ink)}
+  .unit .actions{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap;padding-top:10px}
+  .unit .actions .btn{padding:11px 18px;font-size:.9rem}
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:800;padding:4px 10px;border-radius:999px;width:max-content}
+  .status.open{background:#dcfce7;color:#166534}
+  .status.closed{background:#fee2e2;color:#991b1b}
+  .status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+  .units .checker{position:absolute;left:0;right:0;top:0;height:22px;background-size:22px 22px}
+
+  /* galeria */
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:16px}
+  .gallery a{position:relative;border-radius:20px;overflow:hidden;border:3px solid var(--black)}
+  .gallery a.tall{grid-row:span 2}
+  .gallery a.wide{grid-column:span 2}
+  .gallery img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .gallery a::after{content:"Ver no Instagram ↗";position:absolute;inset:0;background:rgba(227,27,35,.82);color:#fff;display:grid;place-items:center;font-weight:800;opacity:0;transition:opacity .3s}
+  .gallery a:hover::after{opacity:1}
+  .gallery a:hover img{transform:scale(1.1) rotate(1deg)}
+
+  /* CTA final */
+  .cta{background:var(--yellow);text-align:center;position:relative;overflow:hidden}
+  .cta h2.display{font-size:clamp(2.6rem,6vw,4.6rem)}
+  .cta p{font-size:1.15rem;margin:16px auto 32px;max-width:520px}
+  .cta .btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .cta .logo-big{width:150px;height:150px;border-radius:50%;background:var(--red);display:grid;place-items:center;margin:0 auto 26px;border:6px solid var(--black);font-size:2.05rem;animation:wobble 3.5s ease-in-out infinite}
+  @keyframes wobble{0%,100%{rotate:-6deg}50%{rotate:6deg}}
+
+  footer{background:var(--black);color:rgba(255,255,255,.75);padding:56px 0 30px}
+  .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+  .foot h4{color:#fff;font-family:"Lilita One";font-weight:400;font-size:1.3rem;margin-bottom:12px}
+  .foot a:hover{color:var(--yellow)}
+  .foot li{list-style:none;margin:6px 0}
+  .copy{border-top:1px solid rgba(255,255,255,.12);margin-top:40px;padding-top:22px;font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  /* WhatsApp flutuante */
+  .wa-float{position:fixed;right:20px;bottom:20px;z-index:60;width:62px;height:62px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 10px 25px rgba(0,0,0,.35);transition:transform .2s}
+  .wa-float:hover{transform:scale(1.1)}
+  .wa-float svg{width:32px;height:32px;fill:#fff}
+  .wa-float::before{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #25D366;animation:ring 1.8s ease-out infinite}
+  @keyframes ring{to{transform:scale(1.7);opacity:0}}
+
+  /* migalhas ao clicar */
+  .crumb{position:fixed;pointer-events:none;z-index:99;width:9px;height:9px;border-radius:40% 60% 50% 45%;background:#E89B2C;animation:fall .8s ease-out forwards}
+  @keyframes fall{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+  @media (max-width:980px){
+    .hero-grid,.promo-grid,.story-grid{grid-template-columns:minmax(0,1fr)}
+    .hero-visual{width:min(380px,90%);margin-top:20px}
+    .menu-grid{grid-template-columns:repeat(2,1fr)}
+    .unit-grid{grid-template-columns:1fr}
+    .gallery{grid-template-columns:repeat(2,1fr)}
+    .foot{grid-template-columns:1fr}
+    .story-photos{height:440px}
+  }
+  @media (max-width:760px){
+    .links{position:fixed;inset:76px 0 auto;flex-direction:column;background:var(--black);padding:26px;gap:20px;transform:translateY(-130%);transition:transform .35s}
+    .links.open{transform:none}
+    .burger{display:block}
+    section{padding:80px 0}
+    .hero-stats{gap:22px}
+    .badge{width:110px;height:110px}.badge-core{width:54px;height:54px;font-size:1.5rem;right:calc(-4% + 28px);top:calc(-2% + 28px)}
+    .values{grid-template-columns:1fr 1fr 1fr}
+    .gallery{grid-auto-rows:160px}
+  }
+  @media (max-width:520px){
+    .menu-grid{grid-template-columns:1fr}
+    .card .ph{aspect-ratio:4/3}
+    .cd{min-width:72px}.cd b{font-size:2rem}
+    .gallery a.wide{grid-column:span 2}
+  }
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="wrap nav">
+    <a href="#inicio" class="brand"><img src="img/logo.jpg" alt="Logo Don Crock"><b>DON CROCK</b></a>
+    <nav class="links" id="links">
+      <a href="#cardapio">Cardápio</a>
+      <a href="#promo">Promoção</a>
+      <a href="#historia">Nossa história</a>
+      <a href="#unidades">Unidades</a>
+      <a href="#pedir" class="btn btn-yellow">Peça agora</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Abrir menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="rays"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag reveal"><i class="dot"></i> Carpina • Vitória de Santo Antão — PE</span>
+      <h1 class="display reveal d1">Frango<br><span class="crunch"><span>C</span><span>R</span><span>O</span><span>C</span><span>A</span><span>N</span><span>T</span><span>E</span></span><br>de verdade.</h1>
+      <p class="lead reveal d2">Frango frito feito com amor desde 2017. Balde sequinho, burguer de frango que estala na mordida e a parmegiana que Carpina inteira comenta.</p>
+      <div class="hero-ctas reveal d3">
+        <a href="#pedir" class="btn btn-yellow">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM5.2 4l.9 2H20a1 1 0 0 1 .9 1.4l-3.2 6.4a2 2 0 0 1-1.8 1.2H8.1l-.9 1.6V17h12v2H7a2 2 0 0 1-1.8-3l1.3-2.4L3 4H1V2h3.3l.9 2Z"/></svg>
+          Fazer meu pedido
+        </a>
+        <a href="#cardapio" class="btn btn-ghost">Ver cardápio</a>
+      </div>
+      <div class="hero-stats reveal d3">
+        <div><b data-count="2017">2017</b><span>crocando desde</span></div>
+        <div><b data-count="3">3</b><span>unidades em PE</span></div>
+        <div><b data-count="12" data-suffix=" mil+">12 mil+</b><span>fãs no Instagram</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal d2">
+      <div class="bucket"><img src="img/p07.jpg" alt="Balde de frango crocante Don Crock"></div>
+      <svg class="badge" viewBox="0 0 150 150" aria-hidden="true">
+        <defs><path id="circ" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/></defs>
+        <circle cx="75" cy="75" r="72" fill="#141110"/>
+        <text><textPath href="#circ">EST. 2017 • FEITO COM AMOR • </textPath></text>
+      </svg>
+      <div class="badge-core">🍗</div>
+      <div class="sticker">CROC!<small>na primeira mordida</small></div>
+      <span class="floaty" style="left:-8%;top:12%;animation-duration:6s">🍗</span>
+      <span class="floaty" style="right:2%;bottom:-2%;animation-duration:7s;animation-delay:-2s">🍟</span>
+      <span class="floaty" style="left:40%;top:-8%;animation-duration:5s;animation-delay:-1s;font-size:1.8rem">🔥</span>
+    </div>
+  </div>
+  <div class="checker"></div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>BALDE DE FRANGO <i>✦</i> CROC BURGUER <i>✦</i> PARMEGIANA <i>✦</i> SANDUÍCHE DE FRANGO <i>✦</i> BATATA FRITA <i>✦</i> PROMO DIA 15 E 30 <i>✦</i></span>
+    <span>BALDE DE FRANGO <i>✦</i> CROC BURGUER <i>✦</i> PARMEGIANA <i>✦</i> SANDUÍCHE DE FRANGO <i>✦</i> BATATA FRITA <i>✦</i> PROMO DIA 15 E 30 <i>✦</i></span>
+  </div>
+</div>
+
+<!-- CARDÁPIO -->
+<section id="cardapio">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal">
+        <span class="kicker">Cardápio</span>
+        <h2 class="display">Os <em>queridinhos</em><br>da casa</h2>
+      </div>
+      <p class="reveal d1">Empanado na hora, frito no ponto e servido quentinho. Escolha o seu favorito — ou leve todos, a gente não julga.</p>
+    </div>
+    <div class="menu-grid">
+      <article class="card reveal">
+        <span class="pill">Mais pedido</span>
+        <div class="ph"><img src="img/p07.jpg" alt="Balde de frango" style="object-position:center 25%"></div>
+        <div class="body"><h3>Balde de Frango</h3><p>Pedaços suculentos com casquinha super crocante. Perfeito pra dividir (ou não).</p></div>
+      </article>
+      <article class="card reveal d1">
+        <span class="pill">Assinatura</span>
+        <div class="ph"><img src="img/p10.jpg" alt="Hambúrguer de frango crocante"></div>
+        <div class="body"><h3>Burguer Don Crock</h3><p>Frango crocante, pão macio e molhos da casa. O burguer que tem fila de fã.</p></div>
+      </article>
+      <article class="card reveal d2">
+        <div class="ph"><img src="img/sanduiche.jpg" alt="Sanduíche de frango crocante"></div>
+        <div class="body"><h3>Croc Sanduíche</h3><p>Frango empanado, alface, tomate e muito molho. Simples e viciante.</p></div>
+      </article>
+      <article class="card reveal d3">
+        <span class="pill">Prato</span>
+        <div class="ph"><img src="img/p02.jpg" alt="Filé à parmegiana com fritas"></div>
+        <div class="body"><h3>Parmegiana</h3><p>Filé empanado com molho e queijo gratinado, acompanha fritas e purê.</p></div>
+      </article>
+    </div>
+    <p class="menu-note reveal">Preços, combos e cardápio completo no <a href="#pedir">iFood e no WhatsApp</a> da sua unidade.</p>
+  </div>
+</section>
+
+<!-- PROMO -->
+<section class="promo" id="promo">
+  <div class="wrap promo-grid">
+    <div>
+      <span class="kicker" style="color:var(--yellow)">Promoção</span>
+      <h2 class="display reveal">Todo dia <em>15</em> e <em>30</em><br>é dia de Don Crock.</h2>
+      <p class="reveal d1">Duas vezes por mês tem promo especial nas unidades. Marca no calendário — o contador abaixo já faz isso por você.</p>
+      <div class="cd-label reveal d1" id="cdLabel">Próxima promo em:</div>
+      <div class="countdown reveal d2" id="countdown">
+        <div class="cd"><b id="cdD">00</b><span>dias</span></div>
+        <div class="cd"><b id="cdH">00</b><span>horas</span></div>
+        <div class="cd"><b id="cdM">00</b><span>min</span></div>
+        <div class="cd"><b id="cdS">00</b><span>seg</span></div>
+      </div>
+      <div style="margin-top:34px" class="reveal d3"><a href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener" class="btn btn-yellow">Acompanhar no Instagram</a></div>
+    </div>
+    <div class="promo-img reveal d2">
+      <img src="img/p10.jpg" alt="Burguer de frango Don Crock">
+      <div class="sticker">TÁ ON!<small>promo dia 15 e 30</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTÓRIA -->
+<section id="historia" class="story">
+  <div class="wrap story-grid">
+    <div class="story-photos reveal">
+      <img class="a" src="img/p01.jpg" alt="Equipe Don Crock na loja do Shopping Carpina">
+      <img class="b" src="img/p09.jpg" alt="Família Don Crock">
+      <div class="est"><div><small>EST.</small><b>2017</b></div></div>
+    </div>
+    <div>
+      <span class="kicker reveal">Nossa história</span>
+      <h2 class="display reveal d1">Uma <em>família</em> apaixonada por frango frito.</h2>
+      <p class="reveal d2">O Don Crock nasceu em Carpina com uma missão simples: servir o frango mais crocante da Zona da Mata. Negócio de família, receita própria e atendimento de quem conhece o cliente pelo nome.</p>
+      <p class="reveal d2">Hoje são três unidades — no Centro de Carpina, no Shopping Carpina e no Vitória Park Shopping, em Vitória de Santo Antão — e a mesma regra de sempre: <b>frango frito feito com amor.</b></p>
+      <div class="values reveal d3">
+        <div><span>🔥</span>Feito na hora</div>
+        <div><span>👨‍👩‍👧‍👦</span>Negócio de família</div>
+        <div><span>❤️</span>Feito com amor</div>
+      </div>
+      <blockquote class="reveal d3">Melhor frango frito que já comi!<cite>— avaliação de cliente no Restaurant Guru</cite></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- UNIDADES -->
+<section class="units" id="unidades">
+  <div class="checker"></div>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal">
+        <span class="kicker">Unidades</span>
+        <h2 class="display">Tem Don Crock<br><em>pertinho de você</em></h2>
+      </div>
+      <p class="reveal d1">Escolha a unidade mais perto, venha comer com a gente ou peça no conforto de casa.</p>
+    </div>
+    <div class="unit-grid">
+      <article class="unit reveal">
+        <div class="ph"><img src="img/p05.jpg" alt="Unidade Centro de Carpina" style="object-position:center 60%"><span class="city">Carpina — PE</span></div>
+        <div class="body">
+          <h3>Unidade Centro</h3>
+          <div class="row">📍<span>Av. Rosita Freire, 417 — Cajá, Carpina</span></div>
+          <div class="row">🕖<span>A partir das <b>19h</b></span></div>
+          <span class="status" data-open="19" data-close="23">—</span>
+          <div class="actions">
+            <a class="btn btn-red" href="#pedir">Pedir</a>
+            <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Av.+Rosita+Freire,+417,+Caj%C3%A1,+Carpina+PE">Como chegar</a>
+          </div>
+        </div>
+      </article>
+      <article class="unit reveal d1">
+        <div class="ph"><img src="img/p01.jpg" alt="Loja Don Crock no Shopping Carpina"><span class="city">Carpina — PE</span></div>
+        <div class="body">
+          <h3>Shopping Carpina</h3>
+          <div class="row">📍<span>Praça de alimentação — PE-041, Bairro Novo</span></div>
+          <div class="row">🕙<span>Seg a sáb <b>10h–22h</b> • Dom e feriados <b>12h–21h</b></span></div>
+          <span class="status" data-mall="1">—</span>
+          <div class="actions">
+            <a class="btn btn-red" href="#pedir">Pedir</a>
+            <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shopping+Carpina+PE">Como chegar</a>
+          </div>
+        </div>
+      </article>
+      <article class="unit reveal d2">
+        <div class="ph"><img src="img/p03.jpg" alt="Loja Don Crock no Vitória Park Shopping" style="object-position:center 20%"><span class="city">Vitória de Santo Antão — PE</span></div>
+        <div class="body">
+          <h3>Vitória Park Shopping</h3>
+          <div class="row">📍<span>Vitória Park Shopping — Vitória de Santo Antão</span></div>
+          <div class="row">🕙<span>Horário do shopping</span></div>
+          <span class="status" data-mall="1">—</span>
+          <div class="actions">
+            <a class="btn btn-red" href="#pedir">Pedir</a>
+            <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Vit%C3%B3ria+Park+Shopping+Vit%C3%B3ria+de+Santo+Ant%C3%A3o">Como chegar</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal">
+        <span class="kicker">@doncrockbr</span>
+        <h2 class="display">Direto do nosso <em>Instagram</em></h2>
+      </div>
+      <a class="btn btn-red reveal d1" href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4ZM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4ZM12 3.8c2.7 0 3 0 4 .1 2.7.1 4 1.4 4.1 4.1.1 1 .1 1.3.1 4s0 3-.1 4c-.1 2.7-1.4 4-4.1 4.1-1 .1-1.3.1-4 .1s-3 0-4-.1c-2.7-.1-4-1.4-4.1-4.1-.1-1-.1-1.3-.1-4s0-3 .1-4C4 5.3 5.3 4 8 3.9c1-.1 1.3-.1 4-.1ZM12 2c-2.7 0-3.1 0-4.1.1C4.2 2.2 2.2 4.2 2.1 7.9 2 8.9 2 9.3 2 12s0 3.1.1 4.1c.1 3.7 2.1 5.7 5.8 5.8 1 .1 1.4.1 4.1.1s3.1 0 4.1-.1c3.7-.1 5.7-2.1 5.8-5.8.1-1 .1-1.4.1-4.1s0-3.1-.1-4.1c-.1-3.7-2.1-5.7-5.8-5.8C15.1 2 14.7 2 12 2Z"/></svg>
+        Seguir @doncrockbr
+      </a>
+    </div>
+    <div class="gallery">
+      <a class="tall reveal" href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener"><img src="img/p07.jpg" alt="Balde Don Crock" loading="lazy"></a>
+      <a class="wide reveal d1" href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener"><img src="img/p01.jpg" alt="Equipe Don Crock" loading="lazy"></a>
+      <a class="tall reveal d2" href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener"><img src="img/p09.jpg" alt="Família Don Crock" loading="lazy"></a>
+      <a class="reveal" href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener"><img src="img/p02.jpg" alt="Parmegiana" loading="lazy"></a>
+      <a class="reveal d1" href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener"><img src="img/p10.jpg" alt="Burguer" loading="lazy"></a>
+    </div>
+  </div>
+</section>
+
+<!-- PEDIR -->
+<section class="cta" id="pedir">
+  <div class="checker" style="position:absolute;top:0;left:0;right:0;height:22px;background-size:22px 22px"></div>
+  <div class="wrap">
+    <div class="logo-big reveal"><div class="logo-type"><span>DON</span><span>CROCK</span></div></div>
+    <h2 class="display reveal d1">Bateu a fome?<br>A gente resolve.</h2>
+    <p class="reveal d2">Peça pelo WhatsApp ou pelo iFood e receba seu Don Crock quentinho e crocante onde você estiver.</p>
+    <div class="btns reveal d3">
+      <a class="btn btn-dark" href="https://wa.me/5581993574469?text=Ol%C3%A1%2C%20Don%20Crock!%20Quero%20fazer%20um%20pedido%20%F0%9F%8D%97" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8ZM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0Z"/></svg>
+        WhatsApp (81) 99357-4469
+      </a>
+      <a class="btn btn-dark" href="https://wa.me/5581973461232?text=Ol%C3%A1%2C%20Don%20Crock!%20Quero%20fazer%20um%20pedido%20%F0%9F%8D%97" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8ZM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0Z"/></svg>
+        WhatsApp (81) 97346-1232
+      </a>
+      <a class="btn btn-red" href="https://doncrockbr.my.canva.site/don-crock-central-de-links" target="_blank" rel="noopener">🛵 Pedir no iFood</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#inicio" class="brand"><img src="img/logo.jpg" alt="Logo Don Crock"><b>DON CROCK</b></a>
+        <p style="margin-top:14px;max-width:340px">Frango crocante de verdade. Frango frito feito com amor em Carpina e Vitória de Santo Antão — PE, desde 2017.</p>
+      </div>
+      <div>
+        <h4>Navegue</h4>
+        <ul><li><a href="#cardapio">Cardápio</a></li><li><a href="#promo">Promoção 15 e 30</a></li><li><a href="#historia">Nossa história</a></li><li><a href="#unidades">Unidades</a></li></ul>
+      </div>
+      <div>
+        <h4>Fale com a gente</h4>
+        <ul>
+          <li><a href="https://wa.me/5581993574469" target="_blank" rel="noopener">(81) 99357-4469</a></li>
+          <li><a href="https://wa.me/5581973461232" target="_blank" rel="noopener">(81) 97346-1232</a></li>
+          <li><a href="https://www.instagram.com/doncrockbr/" target="_blank" rel="noopener">@doncrockbr</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy"><span>© <span id="yr">2026</span> Don Crock — Frango Crocante & Burguers</span><span>Feito com 🍗 em Pernambuco</span></div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/5581993574469?text=Ol%C3%A1%2C%20Don%20Crock!%20Quero%20fazer%20um%20pedido%20%F0%9F%8D%97" target="_blank" rel="noopener" aria-label="Pedir pelo WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8ZM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0Z"/></svg>
+</a>
+
+<script>
+  // header ao rolar
+  const header = document.getElementById('top');
+  addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 30), {passive:true});
+
+  // menu mobile
+  const links = document.getElementById('links');
+  document.getElementById('burger').onclick = () => links.classList.toggle('open');
+  links.querySelectorAll('a').forEach(a => a.onclick = () => links.classList.remove('open'));
+
+  // reveal ao rolar
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // contadores do hero
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, end = +el.dataset.count, suf = el.dataset.suffix || '', start = end > 1000 ? end - 40 : 0, t0 = performance.now();
+    const step = t => { const p = Math.min((t - t0) / 1400, 1), v = Math.round(start + (end - start) * (1 - Math.pow(1 - p, 3))); el.textContent = v + suf; if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step); cio.unobserve(el);
+  }), {threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+  // contagem regressiva para a promo dos dias 15 e 30
+  const pad = n => String(n).padStart(2, '0');
+  function nextPromo(now) {
+    for (let m = 0; m < 3; m++) {
+      const y = now.getFullYear(), mo = now.getMonth() + m;
+      const last = new Date(y, mo + 1, 0).getDate();
+      for (const d of [15, Math.min(30, last)]) {
+        const start = new Date(y, mo, d), end = new Date(y, mo, d + 1);
+        if (now < end) return {start, end};
+      }
+    }
+  }
+  function tick() {
+    const now = new Date(), {start, end} = nextPromo(now);
+    const live = now >= start, diff = Math.max(0, (live ? end : start) - now);
+    document.getElementById('cdLabel').textContent = live ? '🔥 A promo é HOJE! Termina em:' : 'Próxima promo em:';
+    document.getElementById('cdD').textContent = pad(Math.floor(diff / 864e5));
+    document.getElementById('cdH').textContent = pad(Math.floor(diff / 36e5) % 24);
+    document.getElementById('cdM').textContent = pad(Math.floor(diff / 6e4) % 60);
+    document.getElementById('cdS').textContent = pad(Math.floor(diff / 1e3) % 60);
+  }
+  tick(); setInterval(tick, 1000);
+
+  // aberto/fechado agora
+  function updateStatus() {
+    const n = new Date(), h = n.getHours() + n.getMinutes() / 60, sunday = n.getDay() === 0;
+    document.querySelectorAll('.status').forEach(s => {
+      let open;
+      if (s.dataset.mall) open = sunday ? h >= 12 && h < 21 : h >= 10 && h < 22;
+      else open = h >= +s.dataset.open && h < +s.dataset.close;
+      s.className = 'status ' + (open ? 'open' : 'closed');
+      s.textContent = open ? 'Aberto agora' : 'Fechado agora';
+    });
+  }
+  updateStatus(); setInterval(updateStatus, 60000);
+
+  // migalhas crocantes a cada clique
+  addEventListener('pointerdown', e => {
+    for (let i = 0; i < 9; i++) {
+      const c = document.createElement('i');
+      c.className = 'crumb';
+      c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
+      c.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
+      c.style.setProperty('--dy', (Math.random() * 70 + 10) + 'px');
+      c.style.background = ['#E89B2C', '#C9741A', '#FFC527'][i % 3];
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 800);
+    }
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
