@@ -17,7 +17,7 @@
     --radius:22px; --shadow:0 18px 40px -18px rgba(0,0,0,.45);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:clip}
   body{font-family:"Outfit",system-ui,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.55}
   img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
@@ -98,7 +98,7 @@
   .hero .checker{position:absolute;bottom:0;left:0;right:0}
 
   /* ===== MARQUEE ===== */
-  .marquee{background:var(--black);color:var(--yellow);overflow:hidden;padding:18px 0;rotate:-1.5deg;margin:-14px -20px 0;position:relative;z-index:3;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .marquee{background:var(--black);color:var(--yellow);overflow:hidden;padding:18px 0;transform:skewY(-1.5deg);margin:-14px 0 0;position:relative;z-index:3;box-shadow:0 10px 30px rgba(0,0,0,.3)}
   .marquee-track{display:flex;gap:40px;width:max-content;animation:marq 26s linear infinite;font-family:"Lilita One";font-size:1.7rem;white-space:nowrap}
   .marquee-track span{display:flex;align-items:center;gap:40px}
   .marquee-track i{font-style:normal;color:#fff}
@@ -228,7 +228,125 @@
   .reveal.in{opacity:1;transform:none}
   .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
 
+  /* ===== CARDÁPIO COMPLETO / PEDIDOS ===== */
+  .order{background:#fff;padding-top:90px}
+  .order-tools{position:sticky;top:76px;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);padding:14px 0 12px;margin-bottom:10px;border-bottom:2px solid #f1e6d6}
+  .search{display:flex;align-items:center;gap:10px;background:var(--cream);border:2px solid var(--black);border-radius:999px;padding:10px 18px;margin-bottom:12px}
+  .search input{border:0;background:none;font:inherit;font-size:1rem;flex:1;outline:none;min-width:0}
+  .chips{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:2px solid var(--black);background:#fff;border-radius:999px;padding:8px 16px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+  .chip:hover{transform:translateY(-2px)}
+  .chip.active{background:var(--red);color:#fff;border-color:var(--red)}
+  .mcat{padding-top:34px}
+  .mcat h3{font-family:"Lilita One";font-weight:400;font-size:1.9rem;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .mcat h3 small{font-family:"Outfit";font-size:.8rem;font-weight:800;background:var(--yellow);border-radius:999px;padding:2px 10px}
+  .mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .mitem{display:flex;gap:14px;background:#fff;border:2px solid #eadfce;border-radius:18px;padding:14px;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;outline:none}
+  .mitem:hover,.mitem:focus-visible{border-color:var(--black);transform:translateY(-3px);box-shadow:5px 5px 0 var(--black)}
+  .mitem-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+  .mitem h4{font-size:1.05rem;font-weight:800;line-height:1.2;margin-bottom:4px}
+  .mitem p{font-size:.88rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .mitem-foot{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between}
+  .mitem-foot b{font-size:1.08rem;color:var(--red)}
+  .madd{width:34px;height:34px;border-radius:50%;background:var(--yellow);border:2px solid var(--black);display:grid;place-items:center;font-weight:800;font-size:1.3rem;line-height:1;transition:transform .25s}
+  .mitem:hover .madd{transform:rotate(90deg) scale(1.1);background:var(--red);color:#fff}
+  .mitem-img{flex:none;width:118px;height:118px;border-radius:14px;overflow:hidden;background:var(--cream)}
+  .mitem-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .mitem:hover .mitem-img img{transform:scale(1.08)}
+  .mbadge{align-self:flex-start;font-size:.7rem;font-weight:800;background:#ffe9e9;color:var(--red);border-radius:999px;padding:3px 9px;margin-bottom:6px}
+  .mempty{padding:40px 0;text-align:center;color:var(--muted)}
+  .order-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+  .order-steps div{background:var(--cream);border-radius:16px;padding:14px 16px;font-weight:600;font-size:.95rem;display:flex;gap:12px;align-items:center}
+  .order-steps b{flex:none;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:"Lilita One";font-weight:400}
+
+  /* camadas: modal e gaveta */
+  body.lock{overflow:hidden}
+  .layer{position:fixed;inset:0;z-index:80;background:rgba(20,17,16,.55);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+  .layer.open{opacity:1;visibility:visible}
+  .modal{position:absolute;left:50%;top:50%;translate:-50% -46%;width:min(520px,calc(100% - 24px));max-height:calc(100svh - 40px);background:#fff;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;border:3px solid var(--black);transition:translate .3s cubic-bezier(.2,.9,.3,1.2)}
+  .layer.open .modal{translate:-50% -50%}
+  .modal-scroll{overflow-y:auto}
+  .pm-img{height:230px;background:var(--cream);position:relative}
+  .pm-img img{width:100%;height:100%;object-fit:cover}
+  .xbtn{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:2px solid var(--black);background:#fff;font-size:1.3rem;cursor:pointer;display:grid;place-items:center;z-index:2}
+  .pm-body{padding:20px 22px}
+  .pm-body h3{font-family:"Lilita One";font-weight:400;font-size:1.8rem;line-height:1.05}
+  .pm-body > p{color:var(--muted);margin:6px 0 4px}
+  .pm-price{font-weight:800;color:var(--red);font-size:1.15rem}
+  .optg{border:0;margin-top:18px}
+  .optg legend{font-weight:800;margin-bottom:8px;display:flex;gap:8px;align-items:center}
+  .optg legend em{font-style:normal;font-size:.7rem;background:var(--black);color:#fff;border-radius:999px;padding:2px 8px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt span{display:block;border:2px solid #e5dccd;border-radius:12px;padding:8px 12px;font-size:.9rem;font-weight:600;cursor:pointer;transition:.15s}
+  .opt input:checked + span{border-color:var(--red);background:#fff1f1;color:var(--red)}
+  .opt input:focus-visible + span{outline:3px solid var(--yellow)}
+  .field{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+  .field label,.field .lbl{font-weight:700;font-size:.9rem}
+  .field input,.field select,.field textarea{font:inherit;font-size:1rem;border:2px solid #e5dccd;border-radius:12px;padding:11px 13px;background:#fff;width:100%;outline:none;transition:border-color .2s}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--black)}
+  .field textarea{resize:vertical;min-height:64px}
+  .field small{color:var(--muted)}
+  .row2{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+  .modal-foot{display:flex;gap:12px;align-items:center;padding:14px 18px;border-top:2px solid #f1e6d6;background:#fff}
+  .qty{display:flex;align-items:center;border:2px solid var(--black);border-radius:999px;overflow:hidden;flex:none}
+  .qty button{width:42px;height:44px;border:0;background:#fff;font-size:1.3rem;font-weight:800;cursor:pointer}
+  .qty button:hover{background:var(--yellow)}
+  .qty span{min-width:28px;text-align:center;font-weight:800}
+  .qty.sm button{width:32px;height:32px;font-size:1.05rem}
+  .qty.sm span{min-width:22px}
+  .btn-block{flex:1;justify-content:space-between}
+  .btn[disabled]{opacity:.45;pointer-events:none}
+
+  .drawer{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);background:#fff;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .layer.open .drawer{transform:none}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:var(--red);color:#fff}
+  .drawer-head h3{font-family:"Lilita One";font-weight:400;font-size:1.6rem}
+  .drawer-head .xbtn{position:static}
+  .drawer-body{flex:1;overflow-y:auto;padding:16px 20px 24px}
+  .drawer-foot{padding:16px 20px;border-top:2px solid #f1e6d6}
+  .step{display:none}
+  #cartDrawer[data-step="1"] .s1,#cartDrawer[data-step="2"] .s2,#cartDrawer[data-step="3"] .s3{display:block}
+  #cartDrawer[data-step="1"] .f1,#cartDrawer[data-step="2"] .f2{display:flex}
+  #cartDrawer[data-step="3"] .drawer-foot{display:none}
+  .drawer-foot > div{display:none;gap:10px;flex-direction:column}
+  .citems{list-style:none;display:flex;flex-direction:column;gap:12px}
+  .cline{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;border-bottom:1px dashed #eadfce;padding-bottom:12px}
+  .cline img{width:60px;height:60px;border-radius:12px;object-fit:cover}
+  .cline b{display:block;font-size:.95rem;line-height:1.2}
+  .cline small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+  .cprice{display:block;font-weight:800;color:var(--red);font-size:.9rem;margin-top:3px}
+  .cempty{text-align:center;color:var(--muted);padding:50px 0}
+  .cempty span{display:block;font-size:3rem;margin-bottom:8px;animation:float 3s ease-in-out infinite}
+  .sumrow{display:flex;justify-content:space-between;font-weight:600}
+  .sumrow.total{font-size:1.15rem;font-weight:800}
+  .linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:.85rem;cursor:pointer;align-self:center}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .seg .opt span{text-align:center;padding:14px 10px;font-size:1rem}
+  .seg.three{grid-template-columns:repeat(3,1fr)}
+  .seg.three .opt span{padding:12px 6px;font-size:.9rem}
+  .unit-info{background:var(--cream);border-radius:12px;padding:10px 12px;font-size:.88rem;margin-top:8px}
+  .summary{background:var(--cream);border-radius:16px;padding:14px 16px;margin-top:18px;display:flex;flex-direction:column;gap:6px}
+  .done{text-align:center;padding:40px 10px}
+  .done .big{font-size:4rem;animation:pop 1.6s ease-in-out infinite;display:inline-block}
+  .done h4{font-family:"Lilita One";font-weight:400;font-size:2rem;margin:10px 0}
+  .done p{color:var(--muted);margin-bottom:24px}
+
+  .cart-bar{position:fixed;left:50%;bottom:18px;z-index:65;translate:-50% 140%;display:flex;align-items:center;gap:14px;background:var(--black);color:#fff;border:0;border-radius:999px;padding:10px 12px 10px 10px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.4);transition:translate .4s cubic-bezier(.2,.9,.3,1.3);width:max-content;max-width:calc(100% - 32px)}
+  .cart-bar.show{translate:-50% 0}
+  .cart-bar.bump .cb-icon{animation:bump .5s}
+  @keyframes bump{40%{transform:scale(1.35) rotate(-12deg)}}
+  .cb-icon{position:relative;width:44px;height:44px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:1.3rem}
+  .cb-icon i{position:absolute;top:-4px;right:-4px;background:var(--yellow);color:var(--black);font-style:normal;font-size:.75rem;font-weight:800;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 4px}
+  .cb-go{background:var(--yellow);color:var(--black);border-radius:999px;padding:8px 14px}
+  body.has-cart .wa-float{bottom:96px}
+  .fly{position:fixed;z-index:120;font-size:2rem;pointer-events:none;translate:-50% -50%;transition:transform .7s cubic-bezier(.5,-.3,.7,1),opacity .7s}
+  .toast{position:fixed;left:50%;top:90px;z-index:130;translate:-50% -30px;opacity:0;background:var(--yellow);color:var(--black);border:2px solid var(--black);font-weight:800;padding:10px 18px;border-radius:999px;box-shadow:4px 4px 0 var(--black);transition:.3s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+  .toast.show{translate:-50% 0;opacity:1}
+
   @media (max-width:980px){
+    .mgrid{grid-template-columns:minmax(0,1fr)}
     .hero-grid,.promo-grid,.story-grid{grid-template-columns:minmax(0,1fr)}
     .hero-visual{width:min(380px,90%);margin-top:20px}
     .menu-grid{grid-template-columns:repeat(2,1fr)}
@@ -250,6 +368,12 @@
   @media (max-width:520px){
     .menu-grid{grid-template-columns:1fr}
     .card .ph{aspect-ratio:4/3}
+    .mitem-img{width:96px;height:96px}
+    .order-steps{grid-template-columns:1fr}
+    .order-tools{top:70px}
+    .modal{top:auto;bottom:0;translate:-50% 30%;width:100%;border-radius:24px 24px 0 0;max-height:92svh;border-width:3px 0 0}
+    .layer.open .modal{translate:-50% 0}
+    .pm-img{height:190px}
     .cd{min-width:72px}.cd b{font-size:2rem}
     .gallery a.wide{grid-column:span 2}
   }
@@ -262,11 +386,11 @@
   <div class="wrap nav">
     <a href="#inicio" class="brand"><img src="img/logo.jpg" alt="Logo Don Crock"><b>DON CROCK</b></a>
     <nav class="links" id="links">
-      <a href="#cardapio">Cardápio</a>
+      <a href="#pedir-online">Cardápio</a>
       <a href="#promo">Promoção</a>
       <a href="#historia">Nossa história</a>
       <a href="#unidades">Unidades</a>
-      <a href="#pedir" class="btn btn-yellow">Peça agora</a>
+      <a href="#pedir-online" class="btn btn-yellow">Peça agora</a>
     </nav>
     <button class="burger" id="burger" aria-label="Abrir menu">☰</button>
   </div>
@@ -281,11 +405,11 @@
       <h1 class="display reveal d1">Frango<br><span class="crunch"><span>C</span><span>R</span><span>O</span><span>C</span><span>A</span><span>N</span><span>T</span><span>E</span></span><br>de verdade.</h1>
       <p class="lead reveal d2">Frango frito feito com amor desde 2017. Balde sequinho, burguer de frango que estala na mordida e a parmegiana que Carpina inteira comenta.</p>
       <div class="hero-ctas reveal d3">
-        <a href="#pedir" class="btn btn-yellow">
+        <a href="#pedir-online" class="btn btn-yellow">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM5.2 4l.9 2H20a1 1 0 0 1 .9 1.4l-3.2 6.4a2 2 0 0 1-1.8 1.2H8.1l-.9 1.6V17h12v2H7a2 2 0 0 1-1.8-3l1.3-2.4L3 4H1V2h3.3l.9 2Z"/></svg>
           Fazer meu pedido
         </a>
-        <a href="#cardapio" class="btn btn-ghost">Ver cardápio</a>
+        <a href="#pedir-online" class="btn btn-ghost">Ver cardápio</a>
       </div>
       <div class="hero-stats reveal d3">
         <div><b data-count="2017">2017</b><span>crocando desde</span></div>
@@ -349,7 +473,30 @@
         <div class="body"><h3>Parmegiana</h3><p>Filé empanado com molho e queijo gratinado, acompanha fritas e purê.</p></div>
       </article>
     </div>
-    <p class="menu-note reveal">Preços, combos e cardápio completo no <a href="#pedir">iFood e no WhatsApp</a> da sua unidade.</p>
+    <p class="menu-note reveal"><a href="#pedir-online">Ver o cardápio completo e fazer meu pedido →</a></p>
+  </div>
+</section>
+
+<!-- CARDÁPIO COMPLETO + PEDIDOS -->
+<section class="order" id="pedir-online">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal">
+        <span class="kicker">Peça online</span>
+        <h2 class="display">Cardápio <em>completo</em></h2>
+      </div>
+      <p class="reveal d1">Monte seu pedido aqui e envie direto pro WhatsApp da loja. Delivery ou retirada, você escolhe.</p>
+    </div>
+    <div class="order-steps reveal">
+      <div><b>1</b>Escolha os itens e adicione à sacola</div>
+      <div><b>2</b>Escolha delivery ou retirada e a forma de pagamento</div>
+      <div><b>3</b>Envie pelo WhatsApp e a loja confirma</div>
+    </div>
+    <div class="order-tools">
+      <label class="search"><span aria-hidden="true">🔎</span><input id="menuSearch" type="search" placeholder="Buscar no cardápio… (ex.: balde, combo, milkshake)" aria-label="Buscar no cardápio"></label>
+      <div class="chips" id="menuChips" role="tablist" aria-label="Categorias"></div>
+    </div>
+    <div id="menuList"></div>
   </div>
 </section>
 
@@ -419,7 +566,7 @@
           <div class="row">🕖<span>A partir das <b>19h</b></span></div>
           <span class="status" data-open="19" data-close="23">—</span>
           <div class="actions">
-            <a class="btn btn-red" href="#pedir">Pedir</a>
+            <a class="btn btn-red" href="#pedir-online" data-unit="centro">Pedir</a>
             <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Av.+Rosita+Freire,+417,+Caj%C3%A1,+Carpina+PE">Como chegar</a>
           </div>
         </div>
@@ -432,7 +579,7 @@
           <div class="row">🕙<span>Seg a sáb <b>10h–22h</b> • Dom e feriados <b>12h–21h</b></span></div>
           <span class="status" data-mall="1">—</span>
           <div class="actions">
-            <a class="btn btn-red" href="#pedir">Pedir</a>
+            <a class="btn btn-red" href="#pedir-online" data-unit="shopping">Pedir</a>
             <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shopping+Carpina+PE">Como chegar</a>
           </div>
         </div>
@@ -445,7 +592,7 @@
           <div class="row">🕙<span>Horário do shopping</span></div>
           <span class="status" data-mall="1">—</span>
           <div class="actions">
-            <a class="btn btn-red" href="#pedir">Pedir</a>
+            <a class="btn btn-red" href="#pedir-online" data-unit="vitoria">Pedir</a>
             <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Vit%C3%B3ria+Park+Shopping+Vit%C3%B3ria+de+Santo+Ant%C3%A3o">Como chegar</a>
           </div>
         </div>
@@ -483,8 +630,9 @@
   <div class="wrap">
     <div class="logo-big reveal"><div class="logo-type"><span>DON</span><span>CROCK</span></div></div>
     <h2 class="display reveal d1">Bateu a fome?<br>A gente resolve.</h2>
-    <p class="reveal d2">Peça pelo WhatsApp ou pelo iFood e receba seu Don Crock quentinho e crocante onde você estiver.</p>
+    <p class="reveal d2">Monte seu pedido no site, ou chame direto no WhatsApp ou no iFood. Delivery ou retirada, quentinho e crocante.</p>
     <div class="btns reveal d3">
+      <a class="btn btn-red" href="#pedir-online">🍗 Montar meu pedido</a>
       <a class="btn btn-dark" href="https://wa.me/5581993574469?text=Ol%C3%A1%2C%20Don%20Crock!%20Quero%20fazer%20um%20pedido%20%F0%9F%8D%97" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8ZM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0Z"/></svg>
         WhatsApp (81) 99357-4469
@@ -493,7 +641,7 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8ZM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0Z"/></svg>
         WhatsApp (81) 97346-1232
       </a>
-      <a class="btn btn-red" href="https://doncrockbr.my.canva.site/don-crock-central-de-links" target="_blank" rel="noopener">🛵 Pedir no iFood</a>
+      <a class="btn btn-dark" href="https://doncrockbr.my.canva.site/don-crock-central-de-links" target="_blank" rel="noopener">🛵 Pedir no iFood</a>
     </div>
   </div>
 </section>
@@ -507,7 +655,7 @@
       </div>
       <div>
         <h4>Navegue</h4>
-        <ul><li><a href="#cardapio">Cardápio</a></li><li><a href="#promo">Promoção 15 e 30</a></li><li><a href="#historia">Nossa história</a></li><li><a href="#unidades">Unidades</a></li></ul>
+        <ul><li><a href="#pedir-online">Cardápio e pedidos</a></li><li><a href="#promo">Promoção 15 e 30</a></li><li><a href="#historia">Nossa história</a></li><li><a href="#unidades">Unidades</a></li></ul>
       </div>
       <div>
         <h4>Fale com a gente</h4>
@@ -526,6 +674,99 @@
   <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8ZM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0Z"/></svg>
 </a>
 
+<!-- MODAL DO PRODUTO -->
+<div class="layer" id="productModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pmName">
+    <div class="modal-scroll">
+      <div class="pm-img"><img id="pmImg" alt="" onerror="this.src='img/logo.jpg'"><button class="xbtn" data-close aria-label="Fechar">✕</button></div>
+      <div class="pm-body">
+        <h3 id="pmName"></h3>
+        <p id="pmDesc"></p>
+        <div class="pm-price" id="pmPrice"></div>
+        <div id="pmOpts"></div>
+        <div class="field"><label for="pmObs">Alguma observação?</label><textarea id="pmObs" maxlength="140" placeholder="Ex.: sem tomate, molho à parte…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <div class="qty"><button id="pmMinus" aria-label="Diminuir">−</button><span id="pmQty">1</span><button id="pmPlus" aria-label="Aumentar">+</button></div>
+      <button class="btn btn-red btn-block" id="pmAdd" data-autofocus><span>Adicionar</span><span id="pmTotal"></span></button>
+    </div>
+  </div>
+</div>
+
+<!-- SACOLA / CHECKOUT -->
+<div class="layer" id="cartDrawer" aria-hidden="true" data-step="1">
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <div class="drawer-head"><h3 id="drawerTitle">Sua sacola</h3><button class="xbtn" data-close aria-label="Fechar">✕</button></div>
+    <div class="drawer-body">
+      <div class="step s1">
+        <ul class="citems" id="cartItems"></ul>
+      </div>
+
+      <form class="step s2" id="checkoutForm" novalidate>
+        <div class="field"><span class="lbl">Como você quer receber?</span>
+          <div class="seg">
+            <label class="opt"><input type="radio" name="tipo" value="delivery" checked><span>🛵 Delivery</span></label>
+            <label class="opt"><input type="radio" name="tipo" value="retirada"><span>🏃 Retirada</span></label>
+          </div>
+        </div>
+        <div class="field"><label for="fUnidade" id="unitLabel">Unidade</label><select id="fUnidade" name="unidade"></select><div class="unit-info" id="unitInfo"></div></div>
+        <div class="field"><label for="fNome">Seu nome</label><input id="fNome" name="nome" required autocomplete="name" placeholder="Como podemos te chamar?"></div>
+        <div class="field"><label for="fTel">WhatsApp / telefone</label><input id="fTel" name="tel" required inputmode="tel" autocomplete="tel" placeholder="(81) 9 0000-0000"></div>
+        <div id="addrBox">
+          <div class="row2">
+            <div class="field"><label for="fRua">Rua</label><input id="fRua" name="rua" data-req autocomplete="address-line1"></div>
+            <div class="field"><label for="fNum">Número</label><input id="fNum" name="num" data-req inputmode="numeric"></div>
+          </div>
+          <div class="field"><label for="fBairro">Bairro</label><input id="fBairro" name="bairro" data-req autocomplete="address-level3"></div>
+          <div class="field"><label for="fRef">Ponto de referência <small>(opcional)</small></label><input id="fRef" name="ref" placeholder="Ex.: perto da praça"></div>
+        </div>
+        <div class="field"><span class="lbl">Pagamento</span>
+          <div class="seg three">
+            <label class="opt"><input type="radio" name="pag" value="Pix" checked><span>💠 Pix</span></label>
+            <label class="opt"><input type="radio" name="pag" value="Cartão"><span>💳 Cartão</span></label>
+            <label class="opt"><input type="radio" name="pag" value="Dinheiro"><span>💵 Dinheiro</span></label>
+          </div>
+        </div>
+        <div class="field" id="trocoBox" hidden><label for="fTroco">Troco para quanto? <small>(deixe vazio se não precisar)</small></label><input id="fTroco" name="troco" inputmode="decimal" placeholder="Ex.: 100"></div>
+        <div class="field"><label for="fObs">Observações do pedido <small>(opcional)</small></label><textarea id="fObs" name="obsGeral" maxlength="200" placeholder="Ex.: interfone quebrado, ligar quando chegar"></textarea></div>
+        <div class="summary">
+          <div class="sumrow"><span>Subtotal</span><span id="ckSubtotal"></span></div>
+          <div class="sumrow" id="ckFeeRow"><span>Entrega</span><span id="ckFee"></span></div>
+          <div class="sumrow total"><span>Total</span><span id="ckTotal"></span></div>
+        </div>
+      </form>
+
+      <div class="step s3 done">
+        <div class="big">🍗</div>
+        <h4>Quase lá!</h4>
+        <p id="doneMsg"></p>
+        <button class="btn btn-red" id="doneNew">Fazer novo pedido</button>
+      </div>
+    </div>
+    <div class="drawer-foot">
+      <div class="f1">
+        <div class="sumrow total"><span>Subtotal</span><span id="cartSubtotal"></span></div>
+        <button class="btn btn-red btn-block" id="goCheckout"><span>Continuar</span><span>→</span></button>
+        <button class="linkbtn" id="clearCart" type="button">Esvaziar sacola</button>
+      </div>
+      <div class="f2">
+        <button class="btn btn-block" type="submit" form="checkoutForm" style="background:#25D366;color:#fff;box-shadow:0 6px 0 #1a9e4c"><span>Enviar pedido pelo WhatsApp</span><span>➜</span></button>
+        <button class="linkbtn" id="backToCart" type="button">← Voltar para a sacola</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<button class="cart-bar" id="cartBar" aria-label="Abrir sacola">
+  <span class="cb-icon">🛒<i id="cbCount">0</i></span>
+  <span id="cbTotal">R$ 0,00</span>
+  <span class="cb-go">Ver sacola</span>
+</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="menu.js"></script>
+<script src="pedido.js"></script>
 <script>
   // header ao rolar
   const header = document.getElementById('top');
