@@ -493,7 +493,7 @@
       <div><b>3</b>Envie pelo WhatsApp e a loja confirma</div>
     </div>
     <div class="order-tools">
-      <label class="search"><span aria-hidden="true">🔎</span><input id="menuSearch" type="search" placeholder="Buscar no cardápio… (ex.: balde, combo, milkshake)" aria-label="Buscar no cardápio"></label>
+      <label class="search"><span aria-hidden="true">🔎</span><input maxlength="60" id="menuSearch" type="search" placeholder="Buscar no cardápio… (ex.: balde, combo, milkshake)" aria-label="Buscar no cardápio"></label>
       <div class="chips" id="menuChips" role="tablist" aria-label="Categorias"></div>
     </div>
     <div id="menuList"></div>
@@ -711,15 +711,15 @@
           </div>
         </div>
         <div class="field"><label for="fUnidade" id="unitLabel">Unidade</label><select id="fUnidade" name="unidade"></select><div class="unit-info" id="unitInfo"></div></div>
-        <div class="field"><label for="fNome">Seu nome</label><input id="fNome" name="nome" required autocomplete="name" placeholder="Como podemos te chamar?"></div>
-        <div class="field"><label for="fTel">WhatsApp / telefone</label><input id="fTel" name="tel" required inputmode="tel" autocomplete="tel" placeholder="(81) 9 0000-0000"></div>
+        <div class="field"><label for="fNome">Seu nome</label><input maxlength="80" id="fNome" name="nome" required autocomplete="name" placeholder="Como podemos te chamar?"></div>
+        <div class="field"><label for="fTel">WhatsApp / telefone</label><input maxlength="20" id="fTel" name="tel" required inputmode="tel" autocomplete="tel" placeholder="(81) 9 0000-0000"></div>
         <div id="addrBox">
           <div class="row2">
-            <div class="field"><label for="fRua">Rua</label><input id="fRua" name="rua" data-req autocomplete="address-line1"></div>
-            <div class="field"><label for="fNum">Número</label><input id="fNum" name="num" data-req inputmode="numeric"></div>
+            <div class="field"><label for="fRua">Rua</label><input maxlength="120" id="fRua" name="rua" data-req autocomplete="address-line1"></div>
+            <div class="field"><label for="fNum">Número</label><input maxlength="10" id="fNum" name="num" data-req inputmode="numeric"></div>
           </div>
-          <div class="field"><label for="fBairro">Bairro</label><input id="fBairro" name="bairro" data-req autocomplete="address-level3"></div>
-          <div class="field"><label for="fRef">Ponto de referência <small>(opcional)</small></label><input id="fRef" name="ref" placeholder="Ex.: perto da praça"></div>
+          <div class="field"><label for="fBairro">Bairro</label><input maxlength="60" id="fBairro" name="bairro" data-req autocomplete="address-level3"></div>
+          <div class="field"><label for="fRef">Ponto de referência <small>(opcional)</small></label><input maxlength="100" id="fRef" name="ref" placeholder="Ex.: perto da praça"></div>
         </div>
         <div class="field"><span class="lbl">Pagamento</span>
           <div class="seg three">
@@ -728,7 +728,7 @@
             <label class="opt"><input type="radio" name="pag" value="Dinheiro"><span>💵 Dinheiro</span></label>
           </div>
         </div>
-        <div class="field" id="trocoBox" hidden><label for="fTroco">Troco para quanto? <small>(deixe vazio se não precisar)</small></label><input id="fTroco" name="troco" inputmode="decimal" placeholder="Ex.: 100"></div>
+        <div class="field" id="trocoBox" hidden><label for="fTroco">Troco para quanto? <small>(deixe vazio se não precisar)</small></label><input maxlength="12" id="fTroco" name="troco" inputmode="decimal" placeholder="Ex.: 100"></div>
         <div class="field"><label for="fObs">Observações do pedido <small>(opcional)</small></label><textarea id="fObs" name="obsGeral" maxlength="200" placeholder="Ex.: interfone quebrado, ligar quando chegar"></textarea></div>
         <div class="summary">
           <div class="sumrow"><span>Subtotal</span><span id="ckSubtotal"></span></div>
